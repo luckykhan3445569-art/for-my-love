@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Birthday Surprise Ishita</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+overflow:hidden;
+text-align:center;
+}
+
+/* pages */
+
+.page{
+position:absolute;
+width:100%;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+opacity:0;
+pointer-events:none;
+transition:opacity .7s;
+}
+
+.page.active{
+opacity:1;
+pointer-events:auto;
+}
+
+/* backgrounds */
+
+#page1{background:linear-gradient(135deg,#ffd1dc,#ffc0cb);}
+#page2{background:linear-gradient(135deg,#ff9a9e,#fad0c4);}
+#page3{background:linear-gradient(135deg,#fbc2eb,#a6c1ee);}
+#page4{background:linear-gradient(135deg,#ffdde1,#ee9ca7);}
+#page5{background:linear-gradient(135deg,#ff758c,#ff7eb3);}
+
+/* heart transition */
+
+#heart{
+position:fixed;
+font-size:120px;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%) scale(0);
+color:#ff2d6f;
+pointer-events:none;
+}
+
+.heartAnim{
+animation:heart .9s forwards;
+}
+
+@keyframes heart{
+
+0%{transform:translate(-50%,-50%) scale(0)}
+
+50%{transform:translate(-50%,-50%) scale(2)}
+
+100%{transform:translate(-50%,-50%) scale(35);opacity:0}
+
+}
+
+/* headings */
+
+h1{
+font-family:'Great Vibes',cursive;
+font-size:48px;
+color:#ff2d6f;
+}
+
+/* cake */
+
+.cake{
+font-size:120px;
+margin:20px;
+}
+
+/* buttons */
+
+button{
+padding:14px 26px;
+border:none;
+border-radius:25px;
+background:#ff2d6f;
+color:white;
+font-size:18px;
+cursor:pointer;
+margin-top:20px;
+}
+
+/* gallery */
+
+.gallery{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.gallery img{
+width:130px;
+height:130px;
+object-fit:cover;
+border-radius:12px;
+}
+
+/* message box */
+
+.message{
+background:white;
+padding:25px;
+border-radius:14px;
+max-width:420px;
+box-shadow:0 10px 30px rgba(0,0,0,.2);
+line-height:1.6;
+}
+
+/* gift */
+
+.gift{
+font-size:150px;
+animation:bounce 2s infinite;
+}
+
+@keyframes bounce{
+
+0%,100%{transform:translateY(0)}
+
+50%{transform:translateY(-15px)}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="heart">❤</div>
+
+<!-- PAGE 1 -->
+
+<div id="page1" class="page active">
+
+<h1>Loading your surprise...</h1>
+
+<div class="cake">🎂</div>
+
+</div>
+
+<!-- PAGE 2 -->
+
+<div id="page2" class="page">
+
+<h1>Happy Birthday Ishita</h1>
+
+<div class="cake">🎂</div>
+
+<button onclick="blow()">Blow Candles</button>
+
+<button id="next1" style="display:none" onclick="nextPage(3)">Next</button>
+
+</div>
+
+<!-- PAGE 3 PHOTO PAGE -->
+
+<div id="page3" class="page">
+
+<h1>Our Memories</h1>
+
+<input type="file" multiple onchange="loadPhotos(event)">
+
+<div class="gallery" id="gallery"></div>
+
+<button onclick="nextPage(4)">Open Message</button>
+
+</div>
+
+<!-- PAGE 4 MESSAGE -->
+
+<div id="page4" class="page">
+
+<div class="message">
+
+So this is your birthday and I want to let you know that  
+I love youuuuu so much meri pyari si jaan.
+
+I can't stay without you and you're my everything.  
+You're like a dream for me.
+
+I want to admire you for the rest of my life.  
+Please hamesha meri rehnaaaaaa.
+
+Your birthday is so special for me.
+
+Enjoy this day Ishita.
+
+</div>
+
+<button onclick="nextPage(5)">Final Surprise</button>
+
+</div>
+
+<!-- PAGE 5 GIFT -->
+
+<div id="page5" class="page">
+
+<div class="gift">🎁</div>
+
+<div class="message">
+
+My boring ass gift for my cutu but I hope you like it.  
+I tried my best to make you happy.
+
+mwah ❤️
+
+</div>
+
+</div>
+
+<script>
+
+/* auto start */
+
+setTimeout(()=>{
+
+nextPage(2)
+
+},2500)
+
+/* transition */
+
+function nextPage(n){
+
+let heart=document.getElementById("heart")
+
+heart.classList.remove("heartAnim")
+
+void heart.offsetWidth
+
+heart.classList.add("heartAnim")
+
+setTimeout(()=>{
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
+
+document.getElementById("page"+n).classList.add("active")
+
+},300)
+
+}
+
+/* cake */
+
+function blow(){
+
+confetti({particleCount:200,spread:120})
+
+document.getElementById("next1").style.display="inline-block"
+
+}
+
+/* photo upload */
+
+function loadPhotos(event){
+
+let gallery=document.getElementById("gallery")
+
+gallery.innerHTML=""
+
+for(let file of event.target.files){
+
+let img=document.createElement("img")
+
+img.src=URL.createObjectURL(file)
+
+gallery.appendChild(img)
+
+}
+
+}
+
+</script>
+
+</body>
+
+  </html>
