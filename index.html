@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Birthday Surprise for Ishita</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+overflow:hidden;
+text-align:center;
+}
+
+/* INTRO HEART */
+
+#intro{
+position:fixed;
+width:100%;
+height:100%;
+background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.introHeart{
+font-size:120px;
+color:#ff2d6f;
+animation:explode 2s forwards;
+}
+
+@keyframes explode{
+0%{transform:scale(0)}
+60%{transform:scale(1.3)}
+100%{transform:scale(30);opacity:0}
+}
+
+/* PAGE */
+
+.page{
+position:absolute;
+width:100%;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+padding:20px;
+opacity:0;
+pointer-events:none;
+transition:opacity .8s;
+}
+
+.page.active{
+opacity:1;
+pointer-events:auto;
+}
+
+/* PAGE COLORS */
+
+#page1{background:linear-gradient(135deg,#ffdde1,#ee9ca7);}
+#page2{background:linear-gradient(135deg,#fbc2eb,#a6c1ee);}
+#page3{background:linear-gradient(135deg,#fddb92,#d1fdff);}
+#page4{background:linear-gradient(135deg,#ff9a9e,#fecfef);}
+#page5{background:linear-gradient(135deg,#f6d365,#fda085);}
+#page6{background:linear-gradient(135deg,#ff758c,#ff7eb3);}
+
+/* HEART TRANSITION */
+
+#transitionHeart{
+position:fixed;
+font-size:120px;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%) scale(0);
+color:#ff2d6f;
+pointer-events:none;
+}
+
+.heartAnim{
+animation:heartTransition .8s forwards;
+}
+
+@keyframes heartTransition{
+0%{transform:translate(-50%,-50%) scale(0)}
+40%{transform:translate(-50%,-50%) scale(2)}
+100%{transform:translate(-50%,-50%) scale(40);opacity:0}
+}
+
+/* HEADINGS */
+
+h1{
+font-family:'Great Vibes',cursive;
+font-size:52px;
+color:#ff2d6f;
+}
+
+/* ISHITA GLOW */
+
+.ishita{
+color:#ff2d6f;
+text-shadow:0 0 10px #ff6b9a,0 0 20px #ff6b9a;
+}
+
+/* BUTTON */
+
+button{
+padding:14px 26px;
+border:none;
+border-radius:30px;
+background:#ff2d6f;
+color:white;
+font-size:18px;
+cursor:pointer;
+margin-top:20px;
+box-shadow:0 6px 20px rgba(0,0,0,.2);
+transition:.3s;
+}
+
+button:hover{transform:scale(1.1);}
+
+/* CAKE */
+
+.bigcake{
+font-size:120px;
+animation:bounce 2s infinite;
+}
+
+@keyframes bounce{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
+}
+
+/* BALLOONS */
+
+.balloon-container{
+display:flex;
+gap:40px;
+margin-top:30px;
+}
+
+.heart-balloon{
+width:90px;
+height:90px;
+background:#ff4d6d;
+position:relative;
+transform:rotate(-45deg);
+cursor:pointer;
+transition:.4s;
+}
+
+.heart-balloon:before,
+.heart-balloon:after{
+content:"";
+width:90px;
+height:90px;
+background:#ff4d6d;
+border-radius:50%;
+position:absolute;
+}
+
+.heart-balloon:before{
+top:-45px;
+left:0;
+}
+
+.heart-balloon:after{
+left:45px;
+top:0;
+}
+
+.popped{
+transform:scale(0);
+opacity:0;
+}
+
+/* MESSAGE */
+
+#msgDisplay{
+font-size:26px;
+margin-top:20px;
+color:#ff2d6f;
+font-weight:600;
+}
+
+/* LETTER */
+
+.letter{
+background:white;
+padding:25px;
+border-radius:15px;
+max-width:420px;
+box-shadow:0 10px 30px rgba(0,0,0,.2);
+line-height:1.6;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="intro">
+<div class="introHeart">❤</div>
+</div>
+
+<div id="transitionHeart">❤</div>
+
+<!-- PAGE 1 -->
+
+<div id="page1" class="page active">
+
+<h1>Loading your surprise...</h1>
+<div class="bigcake">🎂</div>
+
+</div>
+
+<!-- PAGE 2 -->
+
+<div id="page2" class="page">
+
+<h1>A Cutie Named <span class="ishita">Ishita</span> Was Born</h1>
+
+<button onclick="nextPage(3)">Open Surprise</button>
+
+</div>
+
+<!-- PAGE 3 -->
+
+<div id="page3" class="page">
+
+<h1>Happy Birthday <span class="ishita">Ishita</span></h1>
+
+<div class="bigcake">🎂</div>
+
+<button onclick="blow()">Blow Candles</button>
+
+<button id="balloonBtn" style="display:none" onclick="nextPage(4)">Next</button>
+
+</div>
+
+<!-- PAGE 4 -->
+
+<div id="page4" class="page">
+
+<h1>Pop the Balloons</h1>
+
+<div class="balloon-container">
+
+<div class="heart-balloon" onclick="popBalloon(this,'Love')"></div>
+<div class="heart-balloon" onclick="popBalloon(this,'Forever')"></div>
+<div class="heart-balloon" onclick="popBalloon(this,'Ishita')"></div>
+
+</div>
+
+<div id="msgDisplay"></div>
+
+<button id="nextBtn4" style="display:none" onclick="nextPage(5)">Next</button>
+
+</div>
+
+<!-- PAGE 5 -->
+
+<div id="page5" class="page">
+
+<button onclick="showLetter()">Open Message</button>
+
+<div id="letterBox" style="display:none">
+
+<div class="letter">
+
+So this is your birthday <span class="ishita">Ishita</span>.  
+This little surprise was made just for you.
+
+</div>
+
+<button onclick="nextPage(6)">Final Page</button>
+
+</div>
+
+</div>
+
+<!-- PAGE 6 -->
+
+<div id="page6" class="page">
+
+<h1>For <span class="ishita">Ishita</span></h1>
+
+<div class="letter">
+
+I love you so much.  
+We'll stay together in every situation.
+
+</div>
+
+</div>
+
+<script>
+
+/* INTRO */
+
+setTimeout(()=>{
+document.getElementById("intro").style.display="none"
+nextPage(2)
+},2500)
+
+/* HEART TRANSITION */
+
+function nextPage(n){
+
+let heart=document.getElementById("transitionHeart")
+
+heart.classList.remove("heartAnim")
+
+void heart.offsetWidth
+
+heart.classList.add("heartAnim")
+
+setTimeout(()=>{
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
+
+document.getElementById("page"+n).classList.add("active")
+
+},300)
+
+}
+
+/* CAKE */
+
+function blow(){
+
+confetti({particleCount:200,spread:120})
+
+document.getElementById("balloonBtn").style.display="inline-block"
+
+}
+
+/* BALLOONS */
+
+let popped=0
+
+function popBalloon(el,text){
+
+if(el.classList.contains("popped")) return
+
+el.classList.add("popped")
+
+document.getElementById("msgDisplay").innerHTML+=text+" "
+
+confetti({particleCount:60,spread:90})
+
+popped++
+
+if(popped===3)
+document.getElementById("nextBtn4").style.display="block"
+
+}
+
+/* LETTER */
+
+function showLetter(){
+document.getElementById("letterBox").style.display="block"
+}
+
+</script>
+
+</body>
+  </html>
