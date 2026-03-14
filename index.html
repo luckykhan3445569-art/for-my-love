@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise for Ishita</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --pink: #ff85a2;
+            --dark-pink: #f75c7e;
+            --soft-white: #fff5f7;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--soft-white);
+            color: #333;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        .page {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Page 1: Loading */
+        .cake-icon { font-size: 80px; margin-bottom: 10px; }
+        .progress-container {
+            width: 250px;
+            height: 15px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--pink);
+            transition: width 0.1s linear;
+        }
+
+        /* Page 2: Window Box */
+        .window-box {
+            border: 8px solid var(--pink);
+            border-radius: 15px;
+            padding: 10px;
+            background: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .gif-placeholder { width: 200px; height: 200px; background: #ffebee; display: flex; align-items: center; justify-content: center; }
+
+        /* Page 3: Cake & Candles */
+        .candle { font-size: 40px; cursor: pointer; transition: 0.3s; }
+        .blown { opacity: 0.3; transform: scale(0.8); pointer-events: none; }
+
+        /* Page 4: Balloons */
+        .balloon-container { display: flex; gap: 15px; margin-bottom: 30px; }
+        .balloon {
+            width: 70px;
+            height: 90px;
+            background: var(--pink);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 10px solid var(--pink);
+        }
+        .popped { transform: scale(0); opacity: 0; }
+        .message-reveal { font-size: 24px; color: var(--dark-pink); height: 40px; margin-top: 20px; font-weight: bold; }
+
+        /* Photos & Final */
+        .photo-stack img {
+            width: 80%;
+            max-width: 300px;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin: 10px;
+            transform: rotate(-3deg);
+        }
+
+        button {
+            background: var(--pink);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(255, 133, 162, 0.4);
+        }
+        button:hover { background: var(--dark-pink); }
+
+        .hidden { display: none; }
+        .letter {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.6;
+            max-width: 400px;
+            border-left: 5px solid var(--pink);
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="page1" class="page active">
+        <div class="cake-icon">🎂</div>
+        <p>Loading your birthday surprise...</p>
+        <div class="progress-container"><div id="bar" class="progress-bar"></div></div>
+    </div>
+
+    <div id="page2" class="page">
+        <div class="window-box">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp6NjB6Nnh6Nnh6Nnh6Nnh6Nnh6Nnh6Nnh6Nnh6Nnh6Nnh6Nnh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/LpDmM2WXO6GfSeQT79/giphy.gif" width="250" alt="Cute gif">
+        </div>
+        <h1>A cutie was born 17 years ago</h1>
+        <h3>Yes, it's you! The surprise awaits you...</h3>
+        <button onclick="nextPage(3)">Click to open surprise 🎁</button>
+    </div>
+
+    <div id="page3" class="page">
+        <h1>Happy Birthday Cutiepie!</h1>
+        <div id="cake-area">
+            <span id="candle1" class="candle">🕯️</span>
+            <span id="candle2" class="candle">🕯️</span>
+            <div style="font-size: 60px;">🎂</div>
+        </div>
+        <button id="blowBtn" onclick="blowCandles()">Blow the candles</button>
+        <button id="popBtn" class="hidden" onclick="nextPage(4)">Pop the balloons! 🎈</button>
+    </div>
+
+    <div id="page4" class="page">
+        <div class="balloon-container">
+            <div class="balloon" id="b1" onclick="pop(1, 'Love')">🎈</div>
+            <div class="balloon" id="b2" onclick="pop(2, 'You')">🎈</div>
+            <div class="balloon" id="b3" onclick="pop(3, 'My Cutu')">🎈</div>
+            <div class="balloon" id="b4" onclick="pop(4, 'Chuimui')">🎈</div>
+        </div>
+        <div id="msgDisplay" class="message-reveal"></div>
+        <button id="nextBtn4" class="hidden" onclick="nextPage(5)">Next ❤️</button>
+    </div>
+
+    <div id="page5" class="page">
+        <div class="photo-stack">
+            <img src="photo1.jpg" alt="Memory 1">
+            <img src="photo2.jpg" alt="Memory 2">
+        </div>
+        <button id="openMsg" onclick="showLetter()">Open Message 💌</button>
+        
+        <div id="letterBox" class="hidden">
+            <div class="letter">
+                So this is your birthday and I want to let you know that I love youuuuu so much meri pyari si Jaan. I can't stay without you and you're my everything. You're like a dream for me. I want to admire you for the rest of my life please hamesha meri rehnaaaaaa. Your birthday is so special for me and enjoy this day Ishita 🥰
+            </div>
+            <div style="font-size: 80px; margin-top:20px;">🎁</div>
+            <p><i>"My boring ass gift for my cutu but I hope you like it. I tried my best to make you happy and mwah"</i></p>
+        </div>
+    </div>
+
+    <script>
+        // Loading Progress
+        let width = 0;
+        let bar = document.getElementById('bar');
+        let interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+                nextPage(2);
+            } else {
+                width++;
+                bar.style.width = width + '%';
+            }
+        }, 30);
+
+        function nextPage(num) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + num).classList.add('active');
+        }
+
+        function blowCandles() {
+            document.getElementById('candle1').classList.add('blown');
+            document.getElementById('candle2').classList.add('blown');
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            document.getElementById('blowBtn').classList.add('hidden');
+            document.getElementById('popBtn').classList.remove('hidden');
+        }
+
+        let pops = 0;
+        function pop(id, text) {
+            const b = document.getElementById('b' + id);
+            if(!b.classList.contains('popped')) {
+                b.classList.add('popped');
+                document.getElementById('msgDisplay').innerText = text;
+                pops++;
+                if(pops === 4) document.getElementById('nextBtn4').classList.remove('hidden');
+            }
+        }
+
+        function showLetter() {
+            document.getElementById('letterBox').classList.remove('hidden');
+            document.getElementById('openMsg').classList.add('hidden');
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    </script>
+</body>
+  </html>
+  
