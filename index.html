@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Queen | Ishita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --royal-gold: #D4AF37;
+            --deep-rose: #880e4f;
+            --heart-red: #ff4d6d;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            transition: background 1.2s ease-in-out;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Page Backgrounds */
+        .bg-page1 { background: #fff5f7; } 
+        .bg-page2 { background: #f3e5f5; } 
+        .bg-page3 { background: #e0f2f1; } 
+        .bg-page4 { background: #fffde7; } 
+        .bg-page5 { background: #fce4ec; } 
+        .bg-page6 { background: #f0f4f8; } 
+
+        /* Glowing Text Effect */
+        h1, h2, .cursive {
+            font-family: 'Great Vibes', cursive;
+            color: var(--deep-rose);
+            text-shadow: 0 0 12px rgba(255, 77, 109, 0.4);
+            animation: softGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes softGlow {
+            from { text-shadow: 0 0 10px rgba(255, 77, 109, 0.2); }
+            to { text-shadow: 0 0 20px rgba(255, 77, 109, 0.6); }
+        }
+
+        .page {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .active { display: flex; }
+
+        .royal-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 35px;
+            border-radius: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 90%;
+        }
+
+        button {
+            background: var(--deep-rose);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(136, 14, 79, 0.2);
+            transition: 0.4s;
+            margin-top: 25px;
+        }
+
+        button:hover { background: var(--royal-gold); transform: scale(1.08) translateY(-3px); }
+
+        /* Floating Stickers */
+        .sticker { 
+            position: absolute; 
+            font-size: 45px; 
+            pointer-events: none; 
+            z-index: 5; 
+            animation: floating 4s ease-in-out infinite; 
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(15deg); }
+        }
+
+        .heart-btn {
+            font-size: 50px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .heart-btn:hover { transform: scale(1.3); }
+    </style>
+</head>
+<body class="bg-page1">
+
+    <div class="sticker" style="top: 10%; left: 8%;">✨</div>
+    <div class="sticker" style="top: 15%; right: 10%; animation-delay: 1s;">🎀</div>
+    <div class="sticker" style="bottom: 12%; left: 12%; animation-delay: 2s;">🧸</div>
+    <div class="sticker" style="bottom: 20%; right: 8%; animation-delay: 1.5s;">💖</div>
+
+    <div id="page1" class="page active">
+        <h1 style="font-size: 4.5rem; margin-bottom: 10px;">For Ishita</h1>
+        <p class="cursive" style="font-size: 2rem;">A world made just for my Queen... 👑</p>
+        <button onclick="changePage(2)">Enter Your Surprise ✨</button>
+    </div>
+
+    <div id="page2" class="page">
+        <div class="royal-card">
+            <h1 style="font-size: 2.8rem;">17 Years Ago...</h1>
+            <p style="font-size: 1.1rem; line-height: 1.6;">A little angel came to earth, and today she's my everything. The world became a better place the day you were born.</p>
+            <button onclick="changePage(3)">Aage Chalo ❤️</button>
+        </div>
+    </div>
+
+    <div id="page3" class="page">
+        <h1 style="font-size: 3.5rem;">Make a Wish!</h1>
+        <div id="cake" style="font-size: 110px; margin: 30px; cursor: pointer;">🎂</div>
+        <p class="cursive" style="font-size: 1.5rem;">The magic is waiting for you...</p>
+        <button id="blowBtn" onclick="blow()">Blow the Magic Candles 🕯️</button>
+        <button id="nextBtn3" style="display:none;" onclick="changePage(4)">Next Surprise!</button>
+    </div>
+
+    <div id="page4" class="page">
+        <h1 class="cursive" style="font-size: 3rem;">Pop the Hearts, Ishita!</h1>
+        <p>Each heart holds a piece of my feelings...</p>
+        <div style="display: flex; gap: 25px; margin: 40px; justify-content: center;">
+            <div class="heart-btn" onclick="popEffect(this)">❤️</div>
+            <div class="heart-btn" onclick="popEffect(this)">💖</div>
+            <div class="heart-btn" onclick="popEffect(this)">💝</div>
+        </div>
+        <button id="nextBtn4" style="display:none;" onclick="changePage(5)">Ready for the Letter?</button>
+    </div>
+
+    <div id="page5" class="page">
+        <div class="royal-card">
+            <h2 class="cursive" style="font-size: 3rem; margin-bottom: 15px;">Meri Pyari Jaan ❤️</h2>
+            <p style="text-align: left; line-height: 1.8; font-size: 1.05rem; color: #333;">
+                I love you so much Ishita. I can't stay without you and you're my everything. 
+                You're like a dream for me, I want to admire you for the rest of my life. 
+                Please hamesha meri rehnaaaaaa... your birthday is so special for me. 
+                Enjoy this day, Ishita! 🥰
+            </p>
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 20px 0;">
+            <div style="font-size: 55px;">🎁✨👑</div>
+            <button onclick="changePage(6)">Open Final Note ❤️</button>
+        </div>
+    </div>
+
+    <div id="page6" class="page">
+        <div class="royal-card">
+            <h1 class="cursive" style="font-size: 3.2rem;">Happy Birthday!</h1>
+            <p style="line-height: 1.8; font-size: 1.15rem;">
+                I tried my best aur isse pehle kisi ke liye aisa kabhi nahi kara 😭. 
+                I hope ye dekh kar tumhare face par ek pyaari si smile aayi hogi. 
+                Enjoy your day, Ishita. Be happy always. Mwah! 💋
+            </p>
+            <div style="font-size: 70px; margin-top: 25px;">🎈🎂🥳</div>
+        </div>
+    </div>
+
+    <script>
+        let poppedCount = 0;
+
+        function changePage(pageNum) {
+            const current = document.querySelector('.page.active');
+            const next = document.getElementById('page' + pageNum);
+            
+            gsap.to(current, { opacity: 0, scale: 0.8, y: -20, duration: 0.6, onComplete: () => {
+                current.classList.remove('active');
+                
+                // Switch Background Class
+                document.body.className = 'bg-page' + pageNum;
+                
+                next.classList.add('active');
+                gsap.fromTo(next, 
+                    { opacity: 0, scale: 1.2, y: 30 }, 
+                    { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: "back.out(1.5)" }
+                );
+            }});
+        }
+
+        function blow() {
+            confetti({
+                particleCount: 200,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#D4AF37', '#ffffff']
+            });
+            document.getElementById('blowBtn').style.display = 'none';
+            document.getElementById('nextBtn3').style.display = 'inline-block';
+        }
+
+        function popEffect(element) {
+            element.style.transform = "scale(0)";
+            setTimeout(() => { element.style.visibility = "hidden"; }, 200);
+            poppedCount++;
+            
+            if(poppedCount >= 3) {
+                document.getElementById('nextBtn4').style.display = 'inline-block';
+            }
+            
+            confetti({
+                particleCount: 30,
+                scalar: 0.7,
+                shapes: ['circle'],
+                origin: { x: event.clientX / window.innerWidth, y: event.clientY / window.innerHeight }
+            });
+        }
+    </script>
+</body>
+      </html>
+      
